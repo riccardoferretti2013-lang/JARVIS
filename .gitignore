@@ -1,0 +1,15 @@
+# Ambiente virtuale Python
+venv/
+
+# File temporanei Python
+__pycache__/
+*.pyc
+
+# Configurazioni personali VS Code
+.vscode/
+
+# Variabili ambiente
+.env
+
+# File sistema
+.DS_Store
