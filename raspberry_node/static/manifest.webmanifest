@@ -1,0 +1,19 @@
+{
+  "name": "J.A.R.V.I.S. Command Center",
+  "short_name": "J.A.R.V.I.S.",
+  "description": "J.A.R.V.I.S. Personal Assistant Network Command Center",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020611",
+  "theme_color": "#020611",
+  "icons": [
+    {
+      "src": "/static/jarvis-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

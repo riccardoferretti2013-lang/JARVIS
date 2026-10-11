@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#020611"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="J.A.R.V.I.S."
+    >
+
+    <title>
+        J.A.R.V.I.S.
+    </title>
+
+    <link
+        rel="manifest"
+        href="/static/manifest.webmanifest"
+    >
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/static/jarvis-icon.svg"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/static/jarvis-icon.svg"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+<body>
+
+    <div
+        class="background-glow glow-one"
+    ></div>
+
+    <div
+        class="background-glow glow-two"
+    ></div>
+
+    <main class="app">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="subtitle">
+                    J.A.R.V.I.S.
+                </p>
+
+                <h1>
+                    Command Center
+                </h1>
+
+            </div>
+
+            <div
+                id="nodeStatus"
+                class="status online"
+            >
+
+                <span
+                    class="status-dot"
+                ></span>
+
+                ONLINE
+
+            </div>
+
+        </header>
+
+
+        <section class="hero">
+
+            <div class="core">
+
+                <div
+                    class="core-ring ring-one"
+                ></div>
+
+                <div
+                    class="core-ring ring-two"
+                ></div>
+
+                <div class="core-center">
+                    J
+                </div>
+
+            </div>
+
+            <div class="hero-text">
+
+                <span>
+                    J.A.R.V.I.S. NODE
+                </span>
+
+                <strong id="clock">
+                    --:--
+                </strong>
+
+                <small id="date">
+                    Caricamento...
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <section class="grid">
+
+            <div class="card">
+
+                <div class="card-title">
+                    STATO SISTEMA
+                </div>
+
+                <div class="info-row">
+
+                    <span>
+                        Node
+                    </span>
+
+                    <strong id="nodeName">
+                        J.A.R.V.I.S. Node
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>
+                        Stato
+                    </span>
+
+                    <strong class="cyan">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>
+                        Modalità
+                    </span>
+
+                    <strong
+                        id="appMode"
+                        class="cyan"
+                    >
+                        WEB
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    J.A.R.V.I.S. MAIN
+                </div>
+
+                <div class="info-row">
+
+                    <span>
+                        Stato
+                    </span>
+
+                    <strong
+                        id="mainStatus"
+                    >
+                        CONTROLLO...
+                    </strong>
+
+                </div>
+
+                <button
+                    id="wakeButton"
+                    class="primary-button"
+                >
+                    ACCENDI PC
+                </button>
+
+                <p
+                    id="wakeResult"
+                    class="result"
+                ></p>
+
+            </div>
+
+        </section>
+
+
+        <section class="card">
+
+            <div class="card-title">
+                REMOTE COMMAND CENTER
+            </div>
+
+            <p class="description">
+                Controlla J.A.R.V.I.S. Main
+                direttamente dal telefono.
+            </p>
+
+
+            <button
+                id="workModeButton"
+                class="primary-button"
+            >
+                ⚡ ATTIVA MODALITÀ LAVORO
+            </button>
+
+
+            <button
+                class="primary-button remote-command"
+                data-command="apri spotify"
+                data-label="Spotify"
+            >
+                🎵 APRI SPOTIFY
+            </button>
+
+
+            <button
+                class="primary-button remote-command"
+                data-command="apri visual studio code"
+                data-label="VS Code"
+            >
+                💻 APRI VS CODE
+            </button>
+
+
+            <button
+                class="primary-button remote-command"
+                data-command="fai uno screenshot"
+                data-label="Screenshot"
+            >
+                📸 SCREENSHOT
+            </button>
+
+
+            <button
+                class="primary-button remote-command dangerous-command"
+                data-command="riavvia il computer"
+                data-label="Riavvia PC"
+            >
+                🔄 RIAVVIA PC
+            </button>
+
+
+            <button
+                class="primary-button remote-command dangerous-command"
+                data-command="spegni il computer"
+                data-label="Spegni PC"
+            >
+                ⏻ SPEGNI PC
+            </button>
+
+
+            <p
+                id="workModeResult"
+                class="result"
+            ></p>
+
+            <p
+                id="commandResult"
+                class="result"
+            ></p>
+
+        </section>
+
+
+        <section class="card reminder-card">
+
+            <div class="card-title">
+                NUOVO PROMEMORIA
+            </div>
+
+            <form id="reminderForm">
+
+                <label for="message">
+                    Promemoria
+                </label>
+
+                <input
+                    id="message"
+                    type="text"
+                    placeholder="Es. Allenamento"
+                    autocomplete="off"
+                    required
+                >
+
+                <div class="form-grid">
+
+                    <div>
+
+                        <label for="reminderDate">
+                            Data
+                        </label>
+
+                        <input
+                            id="reminderDate"
+                            type="date"
+                            required
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label for="reminderTime">
+                            Ora
+                        </label>
+
+                        <input
+                            id="reminderTime"
+                            type="time"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="primary-button"
+                    type="submit"
+                >
+                    CREA PROMEMORIA
+                </button>
+
+            </form>
+
+            <p
+                id="reminderResult"
+                class="result"
+            ></p>
+
+        </section>
+
+
+        <section class="card">
+
+            <div class="section-header">
+
+                <div class="card-title">
+                    PROSSIMI PROMEMORIA
+                </div>
+
+                <button
+                    id="refreshButton"
+                    class="small-button"
+                >
+                    AGGIORNA
+                </button>
+
+            </div>
+
+            <div id="reminders">
+
+                <p class="empty">
+                    Caricamento...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="card pwa-card">
+
+            <div class="card-title">
+                J.A.R.V.I.S. MOBILE
+            </div>
+
+            <div class="info-row">
+
+                <span>
+                    PWA
+                </span>
+
+                <strong
+                    id="pwaStatus"
+                    class="cyan"
+                >
+                    PREPARAZIONE
+                </strong>
+
+            </div>
+
+            <div class="info-row">
+
+                <span>
+                    Service Worker
+                </span>
+
+                <strong
+                    id="serviceWorkerStatus"
+                >
+                    ---
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            J.A.R.V.I.S. Network Core
+
+            <br>
+
+            Raspberry Node
+
+        </footer>
+
+    </main>
+
+    <script src="/static/app.js?v=3"></script>
+
+</body>
+
+</html>

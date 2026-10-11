@@ -1,0 +1,18 @@
+class Configuration:
+    APP_NAME = "J.A.R.V.I.S."
+    VERSION = "0.2.0"
+
+    LANGUAGE = "it"
+
+    WHISPER_MODEL = "small"
+    WHISPER_DEVICE = "cpu"
+    WHISPER_COMPUTE_TYPE = "int8"
+    WHISPER_BEAM_SIZE = 5
+
+    AUDIO_SAMPLE_RATE = 16000
+    AUDIO_RECORDING_DURATION = 5
+    AUDIO_CHANNELS = 1
+    AUDIO_DTYPE = "int16"
+
+    TTS_RATE = 180
+    TTS_VOLUME = 1.0
