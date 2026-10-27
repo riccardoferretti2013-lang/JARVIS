@@ -9,16 +9,30 @@ from .provider import AIProvider, Message, ToolDefinition
 class OllamaProvider(AIProvider):
     """
     Provider AI locale basato su Ollama.
+
+    Include:
+    - timeout HTTP;
+    - limite massimo di token generati;
+    - supporto streaming;
+    - supporto tool calling.
     """
 
     def __init__(
         self,
         model: str = "qwen3:4b-instruct",
         host: str = "http://localhost:11434",
+        timeout_seconds: float = 60.0,
+        max_tokens: int = 256,
     ) -> None:
 
         self._model = model
-        self._client = Client(host=host)
+        self._timeout_seconds = timeout_seconds
+        self._max_tokens = max_tokens
+
+        self._client = Client(
+            host=host,
+            timeout=timeout_seconds,
+        )
 
     @property
     def provider_name(self) -> str:
@@ -27,6 +41,14 @@ class OllamaProvider(AIProvider):
     @property
     def model_name(self) -> str:
         return self._model
+
+    @property
+    def timeout_seconds(self) -> float:
+        return self._timeout_seconds
+
+    @property
+    def max_tokens(self) -> int:
+        return self._max_tokens
 
     def is_available(self) -> bool:
 
@@ -52,6 +74,9 @@ class OllamaProvider(AIProvider):
                 messages=messages,
                 stream=False,
                 think=False,
+                options={
+                    "num_predict": self._max_tokens,
+                },
             )
 
             return (
@@ -59,10 +84,18 @@ class OllamaProvider(AIProvider):
             ).strip()
 
         except ResponseError as error:
-            return f"Errore Ollama: {error.error}"
+
+            return (
+                f"Errore Ollama: "
+                f"{error.error}"
+            )
 
         except Exception as error:
-            return f"Errore imprevisto di Ollama: {error}"
+
+            return (
+                "Errore imprevisto di Ollama: "
+                f"{error}"
+            )
 
     def generate_stream(
         self,
@@ -79,6 +112,9 @@ class OllamaProvider(AIProvider):
                 messages=messages,
                 stream=True,
                 think=False,
+                options={
+                    "num_predict": self._max_tokens,
+                },
             )
 
             for chunk in stream:
@@ -94,13 +130,15 @@ class OllamaProvider(AIProvider):
         except ResponseError as error:
 
             yield (
-                f"Errore Ollama: {error.error}"
+                f"Errore Ollama: "
+                f"{error.error}"
             )
 
         except Exception as error:
 
             yield (
-                f"Errore imprevisto di Ollama: {error}"
+                "Errore imprevisto di Ollama: "
+                f"{error}"
             )
 
     def generate_with_tools(
@@ -123,6 +161,9 @@ class OllamaProvider(AIProvider):
                 tools=tools,
                 stream=False,
                 think=False,
+                options={
+                    "num_predict": self._max_tokens,
+                },
             )
 
             tool_calls: list[ToolCall] = []
@@ -132,7 +173,9 @@ class OllamaProvider(AIProvider):
                 or []
             ):
 
-                function = tool_call.function
+                function = (
+                    tool_call.function
+                )
 
                 tool_calls.append(
                     ToolCall(
@@ -155,11 +198,17 @@ class OllamaProvider(AIProvider):
         except ResponseError as error:
 
             return AIResponse(
-                content=f"Errore Ollama: {error.error}"
+                content=(
+                    f"Errore Ollama: "
+                    f"{error.error}"
+                )
             )
 
         except Exception as error:
 
             return AIResponse(
-                content=f"Errore imprevisto di Ollama: {error}"
+                content=(
+                    "Errore imprevisto di Ollama: "
+                    f"{error}"
+                )
             )

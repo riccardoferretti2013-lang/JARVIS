@@ -1,4 +1,5 @@
 import threading
+
 from datetime import datetime
 
 from PySide6.QtCore import (
@@ -14,6 +15,10 @@ from .system_monitor import SystemMonitor
 
 
 class JarvisBridge(QObject):
+
+    # ============================================================
+    # GENERAL SIGNALS
+    # ============================================================
 
     stateChanged = Signal(
         str,
@@ -62,6 +67,14 @@ class JarvisBridge(QObject):
     )
 
     # ============================================================
+    # GUI NAVIGATION
+    # ============================================================
+
+    pageRequested = Signal(
+        str
+    )
+
+    # ============================================================
     # MEMORY
     # ============================================================
 
@@ -76,6 +89,10 @@ class JarvisBridge(QObject):
         bool,
         str,
     )
+
+    # ============================================================
+    # INIT
+    # ============================================================
 
     def __init__(
         self,
@@ -219,6 +236,65 @@ class JarvisBridge(QObject):
             )
 
     # ============================================================
+    # LOCAL GUI COMMANDS
+    # ============================================================
+
+    def _handle_local_gui_command(
+        self,
+        command: str,
+    ) -> bool:
+        """
+        Intercetta i comandi che riguardano esclusivamente
+        l'interfaccia grafica.
+
+        Questi comandi NON vengono inviati a OpenAI
+        e NON consumano richieste API.
+        """
+
+        normalized = (
+            command
+            .strip()
+            .lower()
+            .replace("’", "'")
+            .replace("`", "'")
+        )
+
+        company_commands = (
+            "fammi vedere l'azienda",
+            "fammi vedere azienda",
+            "apri l'azienda",
+            "apri azienda",
+            "mostrami l'azienda",
+            "mostrami azienda",
+            "fammi vedere la ai company",
+            "fammi vedere ai company",
+            "apri la ai company",
+            "apri ai company",
+            "mostrami la ai company",
+            "mostrami ai company",
+            "fammi vedere la company",
+            "apri la company",
+            "mostrami la company",
+        )
+
+        if any(
+            phrase in normalized
+            for phrase in company_commands
+        ):
+
+            self.pageRequested.emit(
+                "company"
+            )
+
+            self.assistantMessage.emit(
+                "Apro la AI Company."
+            )
+
+            return True
+
+        return False
+
+    # ============================================================
     # TEXT COMMAND
     # ============================================================
 
@@ -234,6 +310,15 @@ class JarvisBridge(QObject):
             not command
             or self._busy
             or not self._ready
+        ):
+            return
+
+        # --------------------------------------------------------
+        # LOCAL GUI COMMAND
+        # --------------------------------------------------------
+
+        if self._handle_local_gui_command(
+            command
         ):
             return
 
@@ -339,6 +424,15 @@ class JarvisBridge(QObject):
             self.voiceCommandDetected.emit(
                 command
             )
+
+            # ----------------------------------------------------
+            # LOCAL GUI COMMAND
+            # ----------------------------------------------------
+
+            if self._handle_local_gui_command(
+                command
+            ):
+                return
 
             self._set_state(
                 "THINKING",

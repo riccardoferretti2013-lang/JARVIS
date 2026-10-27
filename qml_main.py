@@ -15,6 +15,7 @@ from src.jarvis.gui_qml import (
 from src.jarvis.gui_qml.vision_bridge import (
     VisionBridge,
 )
+from src.jarvis.gui_qml.company_bridge import CompanyBridge
 
 
 def get_runtime_root() -> Path:
@@ -66,6 +67,8 @@ def main() -> None:
         )
     )
 
+    company_bridge = CompanyBridge(assistant)
+
     # ========================================================
     # VISION
     # ========================================================
@@ -94,6 +97,11 @@ def main() -> None:
     engine.rootContext().setContextProperty(
         "visionBridge",
         vision_bridge,
+    )
+
+    engine.rootContext().setContextProperty(
+        "companyBridge",
+        company_bridge,
     )
 
     # ========================================================
