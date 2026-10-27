@@ -1,0 +1,10 @@
+MISSION DELIVERY 03
+1. Chiudi J.A.R.V.I.S.
+2. Estrai i tre file e copiali nella root C:\Users\ricca\Desktop\jarvis
+3. Esegui python .\install_delivery.py
+4. Avvia python qml_main.py
+
+Le risposte con blocchi ```python vengono salvate in projects\company_missions.
+La sintassi viene controllata senza eseguire codice. Non e' un test funzionale.
+Non installa dipendenze e non avvia GUI automaticamente.
+I file sono consegnati solo quando il modello fornisce blocchi Python validamente delimitati.

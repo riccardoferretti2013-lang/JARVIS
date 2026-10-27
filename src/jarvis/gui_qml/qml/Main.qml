@@ -35,8 +35,7 @@ ApplicationWindow {
     property int activePage: 0
     property int currentStreamIndex: -1
 
-    property point dragStart:
-        Qt.point(0, 0)
+    property point dragStart: Qt.point(0, 0)
 
 
     // ============================================================
@@ -100,27 +99,13 @@ ApplicationWindow {
     property bool clearMemoryArmed: false
 
 
-    // ============================================================
     // VISION
-    // ============================================================
-
     property string visionFrame: ""
-
-    property bool visionCameraOnline:
-        false
-
-    property int visionHandsCount:
-        0
-
-    property string visionGesture:
-        "STARTING"
-
-    property string visionCommand:
-        "NONE"
-
-    property string visionError:
-        ""
-
+    property bool visionCameraOnline: false
+    property int visionHandsCount: 0
+    property string visionGesture: "STARTING"
+    property string visionCommand: "NONE"
+    property string visionError: ""
 
     // ============================================================
     // NAVIGATION
@@ -166,6 +151,11 @@ ApplicationWindow {
             "label": "08   VISION",
             "title": "VISION",
             "subtitle": "LIVE CAMERA + GESTURE CONTROL"
+        },
+        {
+            "label": "09   COMPANY",
+            "title": "AI COMPANY",
+            "subtitle": "VIRTUAL HEADQUARTERS"
         }
     ]
 
@@ -175,22 +165,16 @@ ApplicationWindow {
     // ============================================================
 
     Component.onCompleted: {
-
         jarvisBridge.start()
-
         visionBridge.start()
-
         bootTimer.start()
     }
 
 
-    onClosing:
-        function(close) {
-
-            close.accepted = false
-
-            window.hide()
-        }
+    onClosing: function(close) {
+        close.accepted = false
+        window.hide()
+    }
 
 
     // ============================================================
@@ -218,9 +202,7 @@ ApplicationWindow {
         repeat: false
 
         onTriggered: {
-
             window.bootPhaseTwo = true
-
             bootTimerTwo.start()
         }
     }
@@ -233,9 +215,7 @@ ApplicationWindow {
         repeat: false
 
         onTriggered: {
-
             window.bootPhaseThree = true
-
             bootTimerThree.start()
         }
     }
@@ -248,7 +228,6 @@ ApplicationWindow {
         repeat: false
 
         onTriggered: {
-
             window.bootFinished = true
         }
     }
@@ -261,7 +240,6 @@ ApplicationWindow {
         repeat: false
 
         onTriggered: {
-
             window.clearMemoryArmed = false
         }
     }
@@ -274,18 +252,16 @@ ApplicationWindow {
         repeat: false
 
         onTriggered: {
-
             window.memoryStatusMessage =
                 "MEMORY SERVICE READY"
 
-            window.memoryStatusSuccess =
-                true
+            window.memoryStatusSuccess = true
         }
     }
 
 
     // ============================================================
-    // JARVIS BRIDGE
+    // PYTHON BRIDGE
     // ============================================================
 
     Connections {
@@ -296,12 +272,8 @@ ApplicationWindow {
             state,
             color
         ) {
-
-            window.jarvisState =
-                state
-
-            window.jarvisColor =
-                color
+            window.jarvisState = state
+            window.jarvisColor = color
         }
 
 
@@ -309,7 +281,6 @@ ApplicationWindow {
             source,
             level
         ) {
-
             var safeLevel =
                 Math.max(
                     0,
@@ -319,20 +290,12 @@ ApplicationWindow {
                     )
                 )
 
-            if (
-                source
-                === "input"
-            ) {
-
+            if (source === "input") {
                 window.inputAudioLevel =
                     safeLevel
             }
 
-            else if (
-                source
-                === "output"
-            ) {
-
+            else if (source === "output") {
                 window.outputAudioLevel =
                     safeLevel
             }
@@ -348,41 +311,20 @@ ApplicationWindow {
             score,
             uptimeText
         ) {
-
-            window.cpuUsage =
-                cpu
-
-            window.ramUsage =
-                memory
-
-            window.diskUsage =
-                disk
-
-            window.networkSpeed =
-                network
-
-            window.gpuUsage =
-                gpu
-
-            window.performance =
-                score
-
-            window.uptime =
-                uptimeText
-
+            window.cpuUsage = cpu
+            window.ramUsage = memory
+            window.diskUsage = disk
+            window.networkSpeed = network
+            window.gpuUsage = gpu
+            window.performance = score
+            window.uptime = uptimeText
 
             var cpuArray =
                 window.cpuHistory.slice()
 
-            cpuArray.push(
-                cpu
-            )
+            cpuArray.push(cpu)
 
-            if (
-                cpuArray.length
-                > 45
-            ) {
-
+            if (cpuArray.length > 45) {
                 cpuArray.shift()
             }
 
@@ -393,15 +335,9 @@ ApplicationWindow {
             var ramArray =
                 window.ramHistory.slice()
 
-            ramArray.push(
-                memory
-            )
+            ramArray.push(memory)
 
-            if (
-                ramArray.length
-                > 45
-            ) {
-
+            if (ramArray.length > 45) {
                 ramArray.shift()
             }
 
@@ -412,15 +348,9 @@ ApplicationWindow {
             var gpuArray =
                 window.gpuHistory.slice()
 
-            gpuArray.push(
-                gpu
-            )
+            gpuArray.push(gpu)
 
-            if (
-                gpuArray.length
-                > 45
-            ) {
-
+            if (gpuArray.length > 45) {
                 gpuArray.shift()
             }
 
@@ -432,7 +362,6 @@ ApplicationWindow {
         function onAssistantMessage(
             message
         ) {
-
             chatModel.append({
                 "role":
                     "J.A.R.V.I.S.",
@@ -444,18 +373,13 @@ ApplicationWindow {
                     "#00D9FF"
             })
 
-            if (
-                chatView.count
-                > 0
-            ) {
-
+            if (chatView.count > 0) {
                 chatView.positionViewAtEnd()
             }
         }
 
 
         function onStreamStarted() {
-
             chatModel.append({
                 "role":
                     "J.A.R.V.I.S.",
@@ -470,11 +394,7 @@ ApplicationWindow {
             window.currentStreamIndex =
                 chatModel.count - 1
 
-            if (
-                chatView.count
-                > 0
-            ) {
-
+            if (chatView.count > 0) {
                 chatView.positionViewAtEnd()
             }
         }
@@ -483,12 +403,10 @@ ApplicationWindow {
         function onStreamChunk(
             chunk
         ) {
-
             if (
                 window.currentStreamIndex
                 < 0
             ) {
-
                 return
             }
 
@@ -505,27 +423,20 @@ ApplicationWindow {
                 previous + chunk
             )
 
-            if (
-                chatView.count
-                > 0
-            ) {
-
+            if (chatView.count > 0) {
                 chatView.positionViewAtEnd()
             }
         }
 
 
         function onStreamFinished() {
-
-            window.currentStreamIndex =
-                -1
+            window.currentStreamIndex = -1
         }
 
 
         function onVoiceCommandDetected(
             command
         ) {
-
             chatModel.append({
                 "role":
                     "RICCARDO // VOICE",
@@ -537,11 +448,7 @@ ApplicationWindow {
                     "#74A7BD"
             })
 
-            if (
-                chatView.count
-                > 0
-            ) {
-
+            if (chatView.count > 0) {
                 chatView.positionViewAtEnd()
             }
         }
@@ -550,7 +457,6 @@ ApplicationWindow {
         function onErrorOccurred(
             message
         ) {
-
             chatModel.append({
                 "role":
                     "SYSTEM ERROR",
@@ -562,18 +468,23 @@ ApplicationWindow {
                     "#FF4D6D"
             })
 
-            if (
-                chatView.count
-                > 0
-            ) {
-
+            if (chatView.count > 0) {
                 chatView.positionViewAtEnd()
             }
         }
 
 
+        function onPageRequested(pageName) {
+            if (pageName === "company") {
+                window.activePage = 8
+                window.show()
+                window.raise()
+                window.requestActivate()
+            }
+        }
+
         // ========================================================
-        // MEMORY
+        // MEMORY SIGNAL
         // ========================================================
 
         function onMemoryDataChanged(
@@ -581,7 +492,6 @@ ApplicationWindow {
             totalCount,
             semanticCount
         ) {
-
             memoryModel.clear()
 
             window.memoryTotal =
@@ -590,13 +500,11 @@ ApplicationWindow {
             window.semanticMemoryTotal =
                 semanticCount
 
-
             for (
                 var i = 0;
                 i < memories.length;
                 i++
             ) {
-
                 var item =
                     memories[i]
 
@@ -631,7 +539,6 @@ ApplicationWindow {
             success,
             message
         ) {
-
             window.memoryStatusMessage =
                 message
 
@@ -640,13 +547,10 @@ ApplicationWindow {
 
             memoryMessageTimer.restart()
 
-
             if (
-                operation
-                === "clear"
+                operation === "clear"
                 && success
             ) {
-
                 window.clearMemoryArmed =
                     false
 
@@ -656,20 +560,12 @@ ApplicationWindow {
     }
 
 
-    // ============================================================
-    // VISION BRIDGE
-    // ============================================================
-
     Connections {
         target: visionBridge
 
 
-        function onFrameChanged(
-            frameSource
-        ) {
-
-            window.visionFrame =
-                frameSource
+        function onFrameChanged(frameSource) {
+            window.visionFrame = frameSource
         }
 
 
@@ -692,26 +588,15 @@ ApplicationWindow {
             window.visionCommand =
                 command
 
-
-            if (
-                cameraOnline
-            ) {
-
-                window.visionError =
-                    ""
+            if (cameraOnline) {
+                window.visionError = ""
             }
         }
 
 
-        function onErrorOccurred(
-            message
-        ) {
-
-            window.visionCameraOnline =
-                false
-
-            window.visionError =
-                message
+        function onErrorOccurred(message) {
+            window.visionCameraOnline = false
+            window.visionError = message
         }
     }
 
@@ -733,8 +618,7 @@ ApplicationWindow {
         clip: true
 
 
-        gradient:
-            Gradient {
+        gradient: Gradient {
 
             GradientStop {
                 position: 0
@@ -753,18 +637,12 @@ ApplicationWindow {
         }
 
 
-        // ========================================================
-        // GRID
-        // ========================================================
-
         Canvas {
             anchors.fill: parent
 
             opacity: 0.18
 
-
             onPaint: {
-
                 var ctx =
                     getContext("2d")
 
@@ -773,68 +651,39 @@ ApplicationWindow {
                 ctx.strokeStyle =
                     "#173747"
 
-                ctx.lineWidth =
-                    1
+                ctx.lineWidth = 1
 
-                var spacing =
-                    46
-
+                var spacing = 46
 
                 for (
                     var x = 0;
                     x < width;
                     x += spacing
                 ) {
-
                     ctx.beginPath()
-
-                    ctx.moveTo(
-                        x,
-                        0
-                    )
-
-                    ctx.lineTo(
-                        x,
-                        height
-                    )
-
+                    ctx.moveTo(x, 0)
+                    ctx.lineTo(x, height)
                     ctx.stroke()
                 }
-
 
                 for (
                     var y = 0;
                     y < height;
                     y += spacing
                 ) {
-
                     ctx.beginPath()
-
-                    ctx.moveTo(
-                        0,
-                        y
-                    )
-
-                    ctx.lineTo(
-                        width,
-                        y
-                    )
-
+                    ctx.moveTo(0, y)
+                    ctx.lineTo(width, y)
                     ctx.stroke()
                 }
             }
         }
 
 
-        // ========================================================
-        // AMBIENT GLOW
-        // ========================================================
-
         Rectangle {
             id: ambientGlow
 
-            anchors.centerIn:
-                parent
+            anchors.centerIn: parent
 
             width:
                 parent.width
@@ -881,10 +730,8 @@ ApplicationWindow {
 
 
             Behavior on scale {
-
                 NumberAnimation {
                     duration: 100
-
                     easing.type:
                         Easing.OutCubic
                 }
@@ -892,7 +739,6 @@ ApplicationWindow {
 
 
             Behavior on width {
-
                 NumberAnimation {
                     duration: 90
                 }
@@ -900,17 +746,12 @@ ApplicationWindow {
 
 
             Behavior on height {
-
                 NumberAnimation {
                     duration: 90
                 }
             }
         }
 
-
-        // ========================================================
-        // SCAN LINE
-        // ========================================================
 
         Rectangle {
             id: scanLine
@@ -920,12 +761,9 @@ ApplicationWindow {
 
             color: "#1700D9FF"
 
-
             NumberAnimation on y {
                 from: 0
-
-                to:
-                    window.height
+                to: window.height
 
                 duration: 10000
 
@@ -942,14 +780,10 @@ ApplicationWindow {
         ColumnLayout {
             id: mainInterface
 
-            anchors.fill:
-                parent
+            anchors.fill: parent
+            anchors.margins: 12
 
-            anchors.margins:
-                12
-
-            spacing:
-                10
+            spacing: 10
 
             opacity:
                 window.bootFinished
@@ -963,7 +797,6 @@ ApplicationWindow {
 
 
             Behavior on opacity {
-
                 NumberAnimation {
                     duration: 700
 
@@ -974,7 +807,6 @@ ApplicationWindow {
 
 
             Behavior on scale {
-
                 NumberAnimation {
                     duration: 700
 
@@ -991,37 +823,29 @@ ApplicationWindow {
             GlassPanel {
                 id: titleBar
 
-                Layout.fillWidth:
-                    true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 68
 
-                Layout.preferredHeight:
-                    68
-
-                highlighted:
-                    true
+                highlighted: true
 
                 accentColor:
                     window.jarvisColor
 
 
                 MouseArea {
-                    anchors.fill:
-                        parent
+                    anchors.fill: parent
 
                     acceptedButtons:
                         Qt.LeftButton
 
-
                     onPressed:
                         function(mouse) {
-
                             window.dragStart =
                                 Qt.point(
                                     mouse.x,
                                     mouse.y
                                 )
                         }
-
 
                     onPositionChanged:
                         function(mouse) {
@@ -1032,7 +856,6 @@ ApplicationWindow {
                                     & Qt.LeftButton
                                 )
                             ) {
-
                                 return
                             }
 
@@ -1048,17 +871,12 @@ ApplicationWindow {
 
 
                 RowLayout {
-                    anchors.fill:
-                        parent
+                    anchors.fill: parent
 
-                    anchors.leftMargin:
-                        20
+                    anchors.leftMargin: 20
+                    anchors.rightMargin: 14
 
-                    anchors.rightMargin:
-                        14
-
-                    spacing:
-                        17
+                    spacing: 17
 
 
                     Rectangle {
@@ -1084,14 +902,20 @@ ApplicationWindow {
                                 + window.visualAudioLevel
                                 * 5
 
-                            height:
-                                width
+                            height: width
 
                             radius:
                                 width / 2
 
                             color:
                                 window.jarvisColor
+
+
+                            Behavior on width {
+                                NumberAnimation {
+                                    duration: 60
+                                }
+                            }
 
 
                             SequentialAnimation on opacity {
@@ -1157,26 +981,21 @@ ApplicationWindow {
                         width: 1
                         height: 28
 
-                        color:
-                            "#244656"
+                        color: "#244656"
                     }
 
 
                     Text {
-                        text:
-                            "BUILD 0.1 ALPHA"
+                        text: "BUILD 0.1 ALPHA"
 
-                        color:
-                            "#4B8DA9"
+                        color: "#4B8DA9"
 
-                        font.pixelSize:
-                            8
+                        font.pixelSize: 8
                     }
 
 
                     Item {
-                        Layout.fillWidth:
-                            true
+                        Layout.fillWidth: true
                     }
 
 
@@ -1232,8 +1051,7 @@ ApplicationWindow {
                         width: 1
                         height: 28
 
-                        color:
-                            "#244656"
+                        color: "#244656"
                     }
 
 
@@ -1265,8 +1083,7 @@ ApplicationWindow {
                             anchors.centerIn:
                                 parent
 
-                            text:
-                                "—"
+                            text: "—"
 
                             color:
                                 "#8CA9B7"
@@ -1283,7 +1100,6 @@ ApplicationWindow {
                                 true
 
                             onClicked: {
-
                                 window.showMinimized()
                             }
                         }
@@ -1306,8 +1122,7 @@ ApplicationWindow {
                             anchors.centerIn:
                                 parent
 
-                            text:
-                                "×"
+                            text: "×"
 
                             color:
                                 closeMouse.containsMouse
@@ -1329,7 +1144,6 @@ ApplicationWindow {
                                 true
 
                             onClicked: {
-
                                 window.hide()
                             }
                         }
@@ -1343,14 +1157,10 @@ ApplicationWindow {
             // ====================================================
 
             RowLayout {
-                Layout.fillWidth:
-                    true
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                Layout.fillHeight:
-                    true
-
-                spacing:
-                    10
+                spacing: 10
 
 
                 // =================================================
@@ -1358,22 +1168,16 @@ ApplicationWindow {
                 // =================================================
 
                 GlassPanel {
-                    Layout.preferredWidth:
-                        190
-
-                    Layout.fillHeight:
-                        true
+                    Layout.preferredWidth: 190
+                    Layout.fillHeight: true
 
 
                     ColumnLayout {
-                        anchors.fill:
-                            parent
+                        anchors.fill: parent
 
-                        anchors.margins:
-                            12
+                        anchors.margins: 12
 
-                        spacing:
-                            6
+                        spacing: 6
 
 
                         Text {
@@ -1399,17 +1203,20 @@ ApplicationWindow {
                             delegate:
                                 Rectangle {
 
-                                required property var modelData
-                                required property int index
+                                required property var
+                                    modelData
 
-                                Layout.fillWidth:
-                                    true
+                                required property int
+                                    index
+
+
+                                Layout.fillWidth: true
 
                                 Layout.preferredHeight:
                                     50
 
-                                radius:
-                                    5
+                                radius: 5
+
 
                                 color:
                                     index
@@ -1419,11 +1226,13 @@ ApplicationWindow {
                                       ? "#0B0B6688"
                                       : "transparent"
 
+
                                 border.width:
                                     index
                                     === window.activePage
                                     ? 1
                                     : 0
+
 
                                 border.color:
                                     "#3700CFFF"
@@ -1465,17 +1274,11 @@ ApplicationWindow {
                                     hoverEnabled:
                                         true
 
-
                                     onClicked: {
-
                                         window.activePage =
                                             index
 
-                                        if (
-                                            index
-                                            === 2
-                                        ) {
-
+                                        if (index === 2) {
                                             jarvisBridge.loadMemory()
                                         }
                                     }
@@ -1485,14 +1288,12 @@ ApplicationWindow {
 
 
                         Item {
-                            Layout.fillHeight:
-                                true
+                            Layout.fillHeight: true
                         }
 
 
                         VoiceWave {
-                            Layout.fillWidth:
-                                true
+                            Layout.fillWidth: true
 
                             state:
                                 window.jarvisState
@@ -1510,12 +1311,10 @@ ApplicationWindow {
                                 Qt.AlignHCenter
 
                             text: {
-
                                 if (
                                     window.jarvisState
                                     === "LISTENING"
                                 ) {
-
                                     return "LIVE MICROPHONE"
                                 }
 
@@ -1523,7 +1322,6 @@ ApplicationWindow {
                                     window.jarvisState
                                     === "SPEAKING"
                                 ) {
-
                                     return "LIVE VOICE OUTPUT"
                                 }
 
@@ -1564,8 +1362,7 @@ ApplicationWindow {
                             Layout.fillWidth:
                                 true
 
-                            height:
-                                1
+                            height: 1
 
                             color:
                                 "#173542"
@@ -1578,12 +1375,6 @@ ApplicationWindow {
                                 + window.uptime
                                 + "\nLOCAL AI // ACTIVE"
                                 + "\nSECURITY // LOCAL"
-                                + "\nVISION // "
-                                + (
-                                    window.visionCameraOnline
-                                    ? "ONLINE"
-                                    : "OFFLINE"
-                                )
 
                             color:
                                 "#35596A"
@@ -1606,42 +1397,29 @@ ApplicationWindow {
                 // =================================================
 
                 GlassPanel {
-                    Layout.fillWidth:
-                        true
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-                    Layout.fillHeight:
-                        true
-
-                    highlighted:
-                        true
+                    highlighted: true
 
                     accentColor:
                         window.jarvisColor
 
 
                     ColumnLayout {
-                        anchors.fill:
-                            parent
+                        anchors.fill: parent
 
-                        anchors.margins:
-                            14
+                        anchors.margins: 14
 
-                        spacing:
-                            10
+                        spacing: 10
 
-
-                        // =========================================
-                        // PAGE HEADER
-                        // =========================================
 
                         RowLayout {
-                            Layout.fillWidth:
-                                true
+                            Layout.fillWidth: true
 
 
                             Column {
-                                spacing:
-                                    1
+                                spacing: 1
 
 
                                 Text {
@@ -1686,33 +1464,6 @@ ApplicationWindow {
 
 
                             Text {
-                                visible:
-                                    window.activePage
-                                    === 7
-
-                                text:
-                                    "● VISION "
-                                    + (
-                                        window.visionCameraOnline
-                                        ? "ONLINE"
-                                        : "OFFLINE"
-                                    )
-
-                                color:
-                                    window.visionCameraOnline
-                                    ? "#00E59B"
-                                    : "#FF4D6D"
-
-                                font.pixelSize:
-                                    8
-                            }
-
-
-                            Text {
-                                visible:
-                                    window.activePage
-                                    !== 7
-
                                 text:
                                     "● "
                                     + window.jarvisState
@@ -1730,26 +1481,18 @@ ApplicationWindow {
                             Layout.fillWidth:
                                 true
 
-                            height:
-                                1
+                            height: 1
 
                             color:
                                 "#173744"
                         }
 
 
-                        // =========================================
-                        // PAGE STACK
-                        // =========================================
-
                         StackLayout {
                             id: pageStack
 
-                            Layout.fillWidth:
-                                true
-
-                            Layout.fillHeight:
-                                true
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
 
                             currentIndex:
                                 window.activePage
@@ -1765,8 +1508,7 @@ ApplicationWindow {
                                     anchors.fill:
                                         parent
 
-                                    spacing:
-                                        9
+                                    spacing: 9
 
 
                                     ListView {
@@ -1791,9 +1533,15 @@ ApplicationWindow {
                                         delegate:
                                             Rectangle {
 
-                                            required property string role
-                                            required property string text
-                                            required property string accent
+                                            required property string
+                                                role
+
+                                            required property string
+                                                text
+
+                                            required property string
+                                                accent
+
 
                                             width:
                                                 chatView.width
@@ -1807,6 +1555,7 @@ ApplicationWindow {
                                             radius:
                                                 7
 
+
                                             color:
                                                 role.indexOf(
                                                     "RICCARDO"
@@ -1814,8 +1563,10 @@ ApplicationWindow {
                                                 ? "#A0091A25"
                                                 : "#A0031420"
 
+
                                             border.width:
                                                 1
+
 
                                             border.color:
                                                 role.indexOf(
@@ -1826,7 +1577,8 @@ ApplicationWindow {
 
 
                                             Column {
-                                                id: messageColumn
+                                                id:
+                                                    messageColumn
 
                                                 anchors.fill:
                                                     parent
@@ -1933,7 +1685,8 @@ ApplicationWindow {
 
 
                                                 TextInput {
-                                                    id: commandField
+                                                    id:
+                                                        commandField
 
                                                     anchors.fill:
                                                         parent
@@ -1963,7 +1716,6 @@ ApplicationWindow {
                                                         true
 
                                                     onAccepted: {
-
                                                         window.sendCurrentCommand()
                                                     }
                                                 }
@@ -2009,7 +1761,6 @@ ApplicationWindow {
                                                     "#00CFFF"
 
                                                 onTriggered: {
-
                                                     jarvisBridge
                                                     .listenMicrophone()
                                                 }
@@ -2030,7 +1781,6 @@ ApplicationWindow {
                                                     "#FF4D6D"
 
                                                 onTriggered: {
-
                                                     jarvisBridge
                                                     .stopResponse()
                                                 }
@@ -2051,7 +1801,6 @@ ApplicationWindow {
                                                     window.jarvisColor
 
                                                 onTriggered: {
-
                                                     window.sendCurrentCommand()
                                                 }
                                             }
@@ -2112,8 +1861,7 @@ ApplicationWindow {
 
 
                                     Rectangle {
-                                        width:
-                                            1
+                                        width: 1
 
                                         Layout.fillHeight:
                                             true
@@ -2237,7 +1985,6 @@ ApplicationWindow {
                                                 window.jarvisColor
 
                                             onTriggered: {
-
                                                 jarvisBridge
                                                 .listenMicrophone()
                                             }
@@ -2255,7 +2002,6 @@ ApplicationWindow {
                                                 "#FF4D6D"
 
                                             onTriggered: {
-
                                                 jarvisBridge
                                                 .stopResponse()
                                             }
@@ -2445,7 +2191,6 @@ ApplicationWindow {
                                                 "#00CFFF"
 
                                             onTriggered: {
-
                                                 jarvisBridge
                                                 .loadMemory()
                                             }
@@ -2463,7 +2208,6 @@ ApplicationWindow {
                                                 "#8B7CFF"
 
                                             onTriggered: {
-
                                                 jarvisBridge
                                                 .rebuildMemoryIndex()
                                             }
@@ -2490,33 +2234,39 @@ ApplicationWindow {
                                                 ? "#FF254F"
                                                 : "#8B3346"
 
-
                                             onTriggered: {
 
                                                 if (
-                                                    !window.clearMemoryArmed
+                                                    !window
+                                                    .clearMemoryArmed
                                                 ) {
-
-                                                    window.clearMemoryArmed =
+                                                    window
+                                                    .clearMemoryArmed =
                                                         true
 
-                                                    clearMemoryTimer.restart()
+                                                    clearMemoryTimer
+                                                    .restart()
 
-                                                    window.memoryStatusMessage =
+                                                    window
+                                                    .memoryStatusMessage =
                                                         "Premi di nuovo CLEAR ALL entro 5 secondi."
 
-                                                    window.memoryStatusSuccess =
+                                                    window
+                                                    .memoryStatusSuccess =
                                                         false
 
                                                     return
                                                 }
 
-                                                clearMemoryTimer.stop()
+                                                clearMemoryTimer
+                                                .stop()
 
-                                                window.clearMemoryArmed =
+                                                window
+                                                .clearMemoryArmed =
                                                     false
 
-                                                jarvisBridge.clearMemory()
+                                                jarvisBridge
+                                                .clearMemory()
                                             }
                                         }
                                     }
@@ -2543,7 +2293,8 @@ ApplicationWindow {
 
 
                                         ListView {
-                                            id: memoryListView
+                                            id:
+                                                memoryListView
 
                                             anchors.fill:
                                                 parent
@@ -2624,15 +2375,30 @@ ApplicationWindow {
                                             delegate:
                                                 Rectangle {
 
-                                                id: memoryCard
+                                                id:
+                                                    memoryCard
 
-                                                required property int memoryId
-                                                required property string memoryKey
-                                                required property string memoryValue
-                                                required property string memoryType
-                                                required property int importance
-                                                required property string createdAt
-                                                required property string updatedAt
+                                                required property int
+                                                    memoryId
+
+                                                required property string
+                                                    memoryKey
+
+                                                required property string
+                                                    memoryValue
+
+                                                required property string
+                                                    memoryType
+
+                                                required property int
+                                                    importance
+
+                                                required property string
+                                                    createdAt
+
+                                                required property string
+                                                    updatedAt
+
 
                                                 width:
                                                     memoryListView.width
@@ -2649,7 +2415,8 @@ ApplicationWindow {
                                                     7
 
                                                 color:
-                                                    memoryMouse.containsMouse
+                                                    memoryMouse
+                                                    .containsMouse
                                                     ? "#B00B1B24"
                                                     : "#99061118"
 
@@ -2657,8 +2424,10 @@ ApplicationWindow {
                                                     1
 
                                                 border.color:
-                                                    window.memoryTypeColor(
-                                                        memoryCard.memoryType
+                                                    window
+                                                    .memoryTypeColor(
+                                                        memoryCard
+                                                        .memoryType
                                                     )
 
 
@@ -2684,14 +2453,17 @@ ApplicationWindow {
                                                             4
 
                                                         color:
-                                                            window.memoryTypeColor(
-                                                                memoryCard.memoryType
+                                                            window
+                                                            .memoryTypeColor(
+                                                                memoryCard
+                                                                .memoryType
                                                             )
                                                     }
 
 
                                                     ColumnLayout {
-                                                        id: memoryContent
+                                                        id:
+                                                            memoryContent
 
                                                         Layout.fillWidth:
                                                             true
@@ -2705,23 +2477,57 @@ ApplicationWindow {
                                                                 true
 
 
-                                                            Text {
-                                                                text:
-                                                                    memoryCard
-                                                                    .memoryType
-                                                                    .toUpperCase()
+                                                            Rectangle {
+                                                                implicitWidth:
+                                                                    memoryTypeText
+                                                                    .implicitWidth
+                                                                    + 16
+
+                                                                implicitHeight:
+                                                                    24
+
+                                                                radius:
+                                                                    4
 
                                                                 color:
+                                                                    "#111D27"
+
+                                                                border.width:
+                                                                    1
+
+                                                                border.color:
                                                                     window
                                                                     .memoryTypeColor(
-                                                                        memoryCard.memoryType
+                                                                        memoryCard
+                                                                        .memoryType
                                                                     )
 
-                                                                font.pixelSize:
-                                                                    7
 
-                                                                font.letterSpacing:
-                                                                    1
+                                                                Text {
+                                                                    id:
+                                                                        memoryTypeText
+
+                                                                    anchors.centerIn:
+                                                                        parent
+
+                                                                    text:
+                                                                        memoryCard
+                                                                        .memoryType
+                                                                        .toUpperCase()
+
+                                                                    color:
+                                                                        window
+                                                                        .memoryTypeColor(
+                                                                            memoryCard
+                                                                            .memoryType
+                                                                        )
+
+                                                                    font.pixelSize:
+                                                                        7
+
+                                                                    font.letterSpacing:
+                                                                        1
+                                                                }
                                                             }
 
 
@@ -2729,9 +2535,11 @@ ApplicationWindow {
                                                                 text:
                                                                     "ID // "
                                                                     + (
-                                                                        memoryCard.memoryId
+                                                                        memoryCard
+                                                                        .memoryId
                                                                         >= 0
-                                                                        ? memoryCard.memoryId
+                                                                        ? memoryCard
+                                                                          .memoryId
                                                                         : "--"
                                                                     )
 
@@ -2752,11 +2560,13 @@ ApplicationWindow {
                                                             Text {
                                                                 text:
                                                                     "IMPORTANCE // "
-                                                                    + memoryCard.importance
+                                                                    + memoryCard
+                                                                    .importance
                                                                     + "/10"
 
                                                                 color:
-                                                                    memoryCard.importance
+                                                                    memoryCard
+                                                                    .importance
                                                                     >= 8
                                                                     ? "#FFC857"
                                                                     : "#658695"
@@ -2772,7 +2582,8 @@ ApplicationWindow {
                                                                 true
 
                                                             text:
-                                                                memoryCard.memoryKey
+                                                                memoryCard
+                                                                .memoryKey
 
                                                             color:
                                                                 "#E3F5FC"
@@ -2793,7 +2604,8 @@ ApplicationWindow {
                                                                 true
 
                                                             text:
-                                                                memoryCard.memoryValue
+                                                                memoryCard
+                                                                .memoryValue
 
                                                             color:
                                                                 "#8FB0BD"
@@ -2817,7 +2629,8 @@ ApplicationWindow {
                                                             Text {
                                                                 text:
                                                                     "CREATED // "
-                                                                    + memoryCard.createdAt
+                                                                    + memoryCard
+                                                                    .createdAt
 
                                                                 color:
                                                                     "#466B7B"
@@ -2829,12 +2642,14 @@ ApplicationWindow {
 
                                                             Text {
                                                                 visible:
-                                                                    memoryCard.updatedAt
+                                                                    memoryCard
+                                                                    .updatedAt
                                                                     !== "--"
 
                                                                 text:
                                                                     "UPDATED // "
-                                                                    + memoryCard.updatedAt
+                                                                    + memoryCard
+                                                                    .updatedAt
 
                                                                 color:
                                                                     "#466B7B"
@@ -2852,27 +2667,70 @@ ApplicationWindow {
                                                     }
 
 
-                                                    ActionButton {
+                                                    Rectangle {
                                                         Layout.preferredWidth:
-                                                            80
+                                                            72
 
-                                                        label:
-                                                            "DELETE"
+                                                        Layout.preferredHeight:
+                                                            34
 
-                                                        accent:
-                                                            "#FF4D6D"
+                                                        radius:
+                                                            5
 
-                                                        onTriggered: {
+                                                        color:
+                                                            deleteMouse
+                                                            .containsMouse
+                                                            ? "#4C1420"
+                                                            : "#1E0D13"
 
-                                                            if (
-                                                                memoryCard.memoryId
-                                                                >= 0
-                                                            ) {
+                                                        border.width:
+                                                            1
 
-                                                                jarvisBridge
-                                                                .deleteMemory(
-                                                                    memoryCard.memoryId
-                                                                )
+                                                        border.color:
+                                                            "#6E2535"
+
+
+                                                        Text {
+                                                            anchors.centerIn:
+                                                                parent
+
+                                                            text:
+                                                                "DELETE"
+
+                                                            color:
+                                                                "#FF8298"
+
+                                                            font.pixelSize:
+                                                                8
+
+                                                            font.letterSpacing:
+                                                                1
+                                                        }
+
+
+                                                        MouseArea {
+                                                            id:
+                                                                deleteMouse
+
+                                                            anchors.fill:
+                                                                parent
+
+                                                            hoverEnabled:
+                                                                true
+
+                                                            onClicked: {
+
+                                                                if (
+                                                                    memoryCard
+                                                                    .memoryId
+                                                                    >= 0
+                                                                ) {
+                                                                    jarvisBridge
+                                                                    .deleteMemory(
+                                                                        memoryCard
+                                                                        .memoryId
+                                                                    )
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -2880,7 +2738,8 @@ ApplicationWindow {
 
 
                                                 MouseArea {
-                                                    id: memoryMouse
+                                                    id:
+                                                        memoryMouse
 
                                                     anchors.fill:
                                                         parent
@@ -3400,7 +3259,8 @@ ApplicationWindow {
 
                                             value:
                                                 Math.round(
-                                                    window.visualAudioLevel
+                                                    window
+                                                    .visualAudioLevel
                                                     * 100
                                                 )
                                                 + "%"
@@ -3409,10 +3269,12 @@ ApplicationWindow {
                                                 "Live audio interface"
 
                                             level:
-                                                window.visualAudioLevel
+                                                window
+                                                .visualAudioLevel
 
                                             accentColor:
-                                                window.jarvisColor
+                                                window
+                                                .jarvisColor
                                         }
 
 
@@ -3576,32 +3438,20 @@ ApplicationWindow {
                                 }
                             }
 
-
-                            // =====================================
                             // PAGE 7 - VISION
-                            // =====================================
-
                             VisionPage {
-                                frameSource:
-                                    window.visionFrame
+                                frameSource: window.visionFrame
+                                cameraOnline: window.visionCameraOnline
+                                handsCount: window.visionHandsCount
+                                gestureState: window.visionGesture
+                                lastCommand: window.visionCommand
+                                errorMessage: window.visionError
+                                accentColor: window.jarvisColor
+                            }
 
-                                cameraOnline:
-                                    window.visionCameraOnline
-
-                                handsCount:
-                                    window.visionHandsCount
-
-                                gestureState:
-                                    window.visionGesture
-
-                                lastCommand:
-                                    window.visionCommand
-
-                                errorMessage:
-                                    window.visionError
-
-                                accentColor:
-                                    window.jarvisColor
+                            // PAGE 8 - COMPANY
+                            CompanyPage {
+                                accentColor: "#00D9FF"
                             }
                         }
                     }
@@ -3617,8 +3467,7 @@ ApplicationWindow {
         Rectangle {
             id: bootOverlay
 
-            anchors.fill:
-                parent
+            anchors.fill: parent
 
             visible:
                 !window.bootFinished
@@ -3771,29 +3620,6 @@ ApplicationWindow {
 
                     Text {
                         text:
-                            "VISION ENGINE ...................... "
-                            + (
-                                window.visionCameraOnline
-                                ? "ONLINE"
-                                : (
-                                    window.bootPhaseThree
-                                    ? "STARTING"
-                                    : "WAIT"
-                                )
-                            )
-
-                        color:
-                            window.visionCameraOnline
-                            ? "#00E59B"
-                            : "#5A879B"
-
-                        font.pixelSize:
-                            8
-                    }
-
-
-                    Text {
-                        text:
                             "AI ENGINE .......................... "
                             + (
                                 window.bootPhaseThree
@@ -3834,15 +3660,16 @@ ApplicationWindow {
                             window.bootPhaseThree
                             ? parent.width
                             : window.bootPhaseTwo
-                              ? parent.width * 0.66
-                              : parent.width * 0.30
+                              ? parent.width
+                                * 0.66
+                              : parent.width
+                                * 0.30
 
                         color:
                             "#00CFFF"
 
 
                         Behavior on width {
-
                             NumberAnimation {
                                 duration:
                                     600
@@ -3884,16 +3711,11 @@ ApplicationWindow {
     // INLINE COMPONENT - ACTION BUTTON
     // ============================================================
 
-    component ActionButton:
-        Rectangle {
-
+    component ActionButton: Rectangle {
         id: actionButton
 
-        property string label:
-            ""
-
-        property color accent:
-            "#00D9FF"
+        property string label: ""
+        property color accent: "#00D9FF"
 
         signal triggered()
 
@@ -3948,7 +3770,6 @@ ApplicationWindow {
                 true
 
             onClicked: {
-
                 actionButton.triggered()
             }
         }
@@ -3959,16 +3780,11 @@ ApplicationWindow {
     // INLINE COMPONENT - HERO
     // ============================================================
 
-    component SectionHero:
-        Rectangle {
-
+    component SectionHero: Rectangle {
         id: sectionHero
 
-        property string title:
-            ""
-
-        property string description:
-            ""
+        property string title: ""
+        property string description: ""
 
         implicitHeight:
             96
@@ -4036,22 +3852,13 @@ ApplicationWindow {
     // INLINE COMPONENT - INFO CARD
     // ============================================================
 
-    component InfoCard:
-        Rectangle {
-
+    component InfoCard: Rectangle {
         id: infoCard
 
-        property string title:
-            ""
-
-        property string value:
-            ""
-
-        property string detail:
-            ""
-
-        property color accent:
-            "#00D9FF"
+        property string title: ""
+        property string value: ""
+        property string detail: ""
+        property color accent: "#00D9FF"
 
         implicitHeight:
             110
@@ -4101,9 +3908,6 @@ ApplicationWindow {
 
 
             Text {
-                width:
-                    parent.width
-
                 text:
                     infoCard.value
 
@@ -4115,9 +3919,6 @@ ApplicationWindow {
 
                 font.weight:
                     Font.Light
-
-                elide:
-                    Text.ElideRight
             }
 
 
@@ -4149,19 +3950,12 @@ ApplicationWindow {
     // INLINE COMPONENT - MEMORY STAT CARD
     // ============================================================
 
-    component MemoryStatCard:
-        Rectangle {
-
+    component MemoryStatCard: Rectangle {
         id: memoryStat
 
-        property string title:
-            ""
-
-        property string value:
-            ""
-
-        property color accent:
-            "#00D9FF"
+        property string title: ""
+        property string value: ""
+        property color accent: "#00D9FF"
 
         implicitHeight:
             90
@@ -4231,22 +4025,13 @@ ApplicationWindow {
     // INLINE COMPONENT - ACTION CARD
     // ============================================================
 
-    component ActionCard:
-        Rectangle {
-
+    component ActionCard: Rectangle {
         id: actionCard
 
-        property string title:
-            ""
-
-        property string subtitle:
-            ""
-
-        property string command:
-            ""
-
-        property color accent:
-            "#00D9FF"
+        property string title: ""
+        property string subtitle: ""
+        property string command: ""
+        property color accent: "#00D9FF"
 
         radius:
             8
@@ -4368,16 +4153,13 @@ ApplicationWindow {
             hoverEnabled:
                 true
 
-
             onClicked: {
 
                 if (
                     actionCard.command.length
                     > 0
                 ) {
-
-                    window.activePage =
-                        0
+                    window.activePage = 0
 
                     window.sendCommandText(
                         actionCard.command
@@ -4401,12 +4183,10 @@ ApplicationWindow {
             command.length
             === 0
         ) {
-
             return
         }
 
-        commandField.text =
-            ""
+        commandField.text = ""
 
         sendCommandText(
             command
@@ -4417,7 +4197,6 @@ ApplicationWindow {
     function sendCommandText(
         command
     ) {
-
         var cleanCommand =
             command.trim()
 
@@ -4425,7 +4204,6 @@ ApplicationWindow {
             cleanCommand.length
             === 0
         ) {
-
             return
         }
 
@@ -4440,15 +4218,12 @@ ApplicationWindow {
                 "#79AABD"
         })
 
-
         if (
             chatView.count
             > 0
         ) {
-
             chatView.positionViewAtEnd()
         }
-
 
         jarvisBridge.sendCommand(
             cleanCommand
@@ -4463,42 +4238,29 @@ ApplicationWindow {
         var type =
             memoryType.toLowerCase()
 
-
         if (
-            type
-            === "profile"
+            type === "profile"
         ) {
-
             return "#00CFFF"
         }
 
-
         if (
-            type
-            === "preference"
+            type === "preference"
         ) {
-
             return "#8B7CFF"
         }
 
-
         if (
-            type
-            === "project"
+            type === "project"
         ) {
-
             return "#00E59B"
         }
 
-
         if (
-            type
-            === "experience"
+            type === "experience"
         ) {
-
             return "#FFC857"
         }
-
 
         return "#79AABD"
     }
